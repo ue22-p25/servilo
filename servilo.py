@@ -27,14 +27,18 @@ def réponse_pour_route(route, verbe, headers, form):
 
 
 def gérer_formulaire(form):
-    print(f"{form=}")
-    réponse = Réponse()
+    nom = form["nom"][0]
 
     global COMPTE
     COMPTE += 1
 
-    réponse.code = 303
-    réponse.headers["location"] = "/"
+    html = Path("signature.html").read_text()
+    html = html.replace("{{ nom }}", nom)
+
+    réponse = Réponse()
+
+    réponse.headers["Content-Type"] = "text/html; charset=UTF-8"
+    réponse.texte = html
 
     return réponse
 
