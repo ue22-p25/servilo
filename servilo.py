@@ -1,4 +1,5 @@
 from pathlib import Path
+from http.server import ThreadingHTTPServer
 
 
 class Réponse:
@@ -11,8 +12,23 @@ class Réponse:
 def réponse_pour_route(route, verbe, headers, form):
     réponse = Réponse()
 
-    chemin = Path("index.html")
+    print(f"{route=} {verbe=}")
+
+    réponse = Réponse()
+
+    nom_fichier = route[1:]
+    if not nom_fichier:
+        nom_fichier = "index.html"
+
+    chemin = Path(nom_fichier)
+
+    extension = chemin.suffix
+    if extension == ".html":
+        content_type = "text/html;charset=utf-8"
+    else:
+        content_type = "text/css"
+
     réponse.texte = chemin.read_text()
-    réponse.headers["Content-Type"] = "text/html;charset=utf-8"
+    réponse.headers["Content-Type"] = content_type
 
     return réponse
